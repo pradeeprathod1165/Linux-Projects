@@ -10,13 +10,19 @@ BACKUPFILE="$BACKUP_DIR/backup_$TIMESTAMP.tar.gz"
 
 if tar -czvf "$BACKUPFILE" "$SOURCE_DIR"
 then
-	echo "Backup created successfully."
-	echo "$BACKUPFILE"
+
+    if [ -f "$BACKUPFILE" ] && [ -s "$BACKUPFILE" ]
+    then
+        echo "Backup verified successfully."
         echo "[$TIMESTAMP] SUCCESS: $BACKUPFILE created" >> "$LOGFILE"
+
+    else
+        echo "Backup verification failed."
+        echo "[$TIMESTAMP] ERROR: Backup file invalid" >> "$LOGFILE"
+    fi
+
 else
-	echo "Backup failed."
-	echo "[$TIMESTAMP] FAILED: Backup creation failed" >> "$LOGFILE"
+    echo "Backup creation failed."
+    echo "[$TIMESTAMP] FAILED: Backup creation failed" >> "$LOGFILE"
 fi
-
-
 
