@@ -37,3 +37,24 @@ echo "====== OPEN PORTS ======"
 ss -tuln
 
 
+
+check_service() {
+     service_name=$1
+
+     if systemctl is-active --quiet "$service_name"
+      then
+	      echo "$service_name : RUNNING"
+
+      else
+	      echo "$service_name : STOPPED"
+     fi
+}
+
+
+echo
+echo "====== SERVICE STATUS ======="
+check_service ssh
+check_service nginx
+check_service mysql
+
+
