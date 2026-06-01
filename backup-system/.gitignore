@@ -1,5 +1,13 @@
+# Generated backups
 backups/*
+
+# Generated logs
 logs/*
 
+# Restored files
+restored-data/*
+
+# Keep directory structure
 !backups/.gitkeep
 !logs/.gitkeep
+!restored-data/.gitkeep
