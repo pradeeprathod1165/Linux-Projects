@@ -1,2 +1,5 @@
-backups/
-logs/*.log
+backups/*
+logs/*
+
+!backups/.gitkeep
+!logs/.gitkeep
