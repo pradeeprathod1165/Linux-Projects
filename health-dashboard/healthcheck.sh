@@ -1,98 +1,127 @@
 #!/bin/bash
 
-echo "=============================="
-echo     LINUX HEALTH DASHBOARD
-echo "=============================="
+# ==========================
+# Linux Health Dashboard v1
+# ==========================
 
-echo
-echo "======= HOSTNAME ======="
-HOSTNAME=$(hostname)
-echo "Hostname: $HOSTNAME"
+START_TIME=$(date +%s)
 
-echo
-echo "====== CURRENT USER ======"
-USER=$(whoami)
-echo "Current User: $USER"
+HEALTH_SCORE=100
 
-echo
-echo "====== DATE ======"
-DATE=$(date)
-echo "Date: $DATE"
+mkdir -p logs
+LOGFILE="logs/healthcheck.log"
 
-echo
-echo "====== SYSTEM UPTIME ======"
-UPTIME=$(uptime -p)
-echo "uptime: $UPTIME"
+# Colors
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
 
-echo
-echo "====== MEMORY USAGE ======"
-free -h
+# ==========================
+# Functions
+# ==========================
 
-echo
-echo "====== DISK USAGE ======"
-df -h
-
-echo
-echo "====== OPEN PORTS ======"
-ss -tuln
-
-
-
-check_service() {
-     service_name=$1
-
-     if systemctl is-active --quiet "$service_name"
-      then
-	      printf "%-10s : RUNNING\n" "$service_name"
-
-      else
-	      printf "%-10s : STOPPED\n" "$service_name"
-     fi
+print_section() {
+    echo
+    echo "====== $1 ======"
 }
 
+check_service() {
+    local service_name=$1
 
-echo
-echo "====== SERVICE STATUS ======="
+    if systemctl is-active --quiet "$service_name"
+    then
+        printf "%-10s : ${GREEN}RUNNING${NC}\n" "$service_name"
+    else
+        printf "%-10s : ${RED}STOPPED${NC}\n" "$service_name"
+        HEALTH_SCORE=$((HEALTH_SCORE - 10))
+    fi
+}
+
+# ==========================
+# Dashboard Header
+# ==========================
+
+echo "================================="
+echo "     LINUX HEALTH DASHBOARD"
+echo "================================="
+
+# ==========================
+# System Information
+# ==========================
+
+HOSTNAME=$(hostname)
+CURRENT_USER=$(whoami)
+CURRENT_DATE=$(date)
+UPTIME=$(uptime -p)
+
+print_section "HOSTNAME"
+echo "Hostname: $HOSTNAME"
+
+print_section "CURRENT USER"
+echo "Current User: $CURRENT_USER"
+
+print_section "DATE"
+echo "Date: $CURRENT_DATE"
+
+print_section "SYSTEM UPTIME"
+echo "Uptime: $UPTIME"
+
+# ==========================
+# Memory & Disk
+# ==========================
+
+print_section "MEMORY USAGE"
+free -h
+
+print_section "DISK USAGE"
+df -h
+
+# ==========================
+# Network
+# ==========================
+
+print_section "OPEN PORTS"
+ss -tuln
+
+# ==========================
+# Services
+# ==========================
+
+print_section "SERVICE STATUS"
+
 check_service ssh
 check_service nginx
 check_service mysql
 
+# ==========================
+# Top Processes
+# ==========================
 
-echo
-echo "====== TOP MEMORY PROCESSES ======"
-ps aux --sort=-%mem | head -5
+print_section "TOP MEMORY PROCESSES"
+ps aux --sort=-%mem | head -6
 
-echo 
-echo "====== TOP CPU PROCESSES ======"
-ps aux --sort=-%cpu | head -5
+print_section "TOP CPU PROCESSES"
+ps aux --sort=-%cpu | head -6
 
+# ==========================
+# Health Score
+# ==========================
 
-echo
-HEALTH_SCORE=100
-
-if ! systemctl is-active --quiet ssh
-then
-	HEALTH_SCORE=$((HEALTH_SCORE-10))
-fi
-
-
-if ! systemctl is-active --quiet nginx
-then
-	HEALTH_SCORE=$((HEALTH_SCORE-10))
-fi
-
-
-if ! systemctl is-active --quiet mysql
-then
-	HEALTH_SCORE=$((HEALTH_SCORE-10))
-fi
-
-
-echo
-echo "====== HEALTH SCORE ======"
+print_section "HEALTH SCORE"
 echo "System Health: $HEALTH_SCORE/100"
 
+# ==========================
+# Logging
+# ==========================
 
+echo "[$(date)] Dashboard Executed | Score:$HEALTH_SCORE" >> "$LOGFILE"
 
+# ==========================
+# Execution Time
+# ==========================
 
+END_TIME=$(date +%s)
+EXECUTION_TIME=$((END_TIME - START_TIME))
 
+print_section "EXECUTION TIME"
+echo "Execution Time: ${EXECUTION_TIME}s"
