@@ -58,3 +58,41 @@ check_service nginx
 check_service mysql
 
 
+echo
+echo "====== TOP MEMORY PROCESSES ======"
+ps aux --sort=-%mem | head -5
+
+echo 
+echo "====== TOP CPU PROCESSES ======"
+ps aux --sort=-%cpu | head -5
+
+
+echo
+HEALTH_SCORE=100
+
+if ! systemctl is-active --quiet ssh
+then
+	HEALTH_SCORE=$((HEALTH_SCORE-10))
+fi
+
+
+if ! systemctl is-active --quiet nginx
+then
+	HEALTH_SCORE=$((HEALTH_SCORE-10))
+fi
+
+
+if ! systemctl is-active --quiet mysql
+then
+	HEALTH_SCORE=$((HEALTH_SCORE-10))
+fi
+
+
+echo
+echo "====== HEALTH SCORE ======"
+echo "System Health: $HEALTH_SCORE/100"
+
+
+
+
+
