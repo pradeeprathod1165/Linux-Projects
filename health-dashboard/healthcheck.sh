@@ -43,10 +43,10 @@ check_service() {
 
      if systemctl is-active --quiet "$service_name"
       then
-	      echo "$service_name : RUNNING"
+	      printf "%-10s : RUNNING\n" "$service_name"
 
       else
-	      echo "$service_name : STOPPED"
+	      printf "%-10s : STOPPED\n" "$service_name"
      fi
 }
 
