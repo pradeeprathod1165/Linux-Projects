@@ -34,13 +34,22 @@ show_top_error() {
 	echo "TOP ERROR MESSAGES"
 	echo "------------------"
 
-	grep "ERROR" "$LOGFILE" | cut -d ':' -f2 | sort | uniq -c
+	grep "ERROR" "$LOGFILE" | cut -d ':' -f2 | sed 's/^ *//' | sort | uniq -c
 }
+show_failed_logins() {
+	echo
+	echo "FAILED LOGIN ANALYSIS"
+	echo "---------------------"
 
+	grep "FAILED LOGIN" "$LOGFILE" | cut -d ':' -f2 | sed 's/^ *//' | sort | uniq -c
+
+}
   echo 
   display_statistics
   echo
   show_top_error
+  echo 
+  show_failed_logins
 
 
 {
@@ -49,6 +58,8 @@ show_top_error() {
         display_statistics
 	echo
 	show_top_error
+	echo
+	show_failed_logins
 	echo
 	echo "Generated on:"
 	date

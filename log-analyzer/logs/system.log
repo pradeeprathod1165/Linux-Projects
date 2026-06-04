@@ -4,4 +4,8 @@ ERROR: Database connection failed
 WARNING: Disk usage high
 ERROR: Permission denied
 ERROR: Permission denied
+FAILED LOGIN: root
+FAILED LOGIN: admin
+FAILED LOGIN: root
+FAILED LOGIN: root
 INFO: User login successful

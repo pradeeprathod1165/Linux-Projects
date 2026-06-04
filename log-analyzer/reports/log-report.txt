@@ -1,6 +1,6 @@
 ==== LOG ANALYSIS REPORT ====
 
-Total Lines: 7
+Total Lines: 11
 Total Warnings: 1
 Total Errors: 4
 Total Infos: 2
@@ -8,8 +8,14 @@ Total Infos: 2
 
 TOP ERROR MESSAGES
 ------------------
-      2  Database connection failed
-      2  Permission denied
+      2 Database connection failed
+      2 Permission denied
+
+
+FAILED LOGIN ANALYSIS
+---------------------
+      1 admin
+      3 root
 
 Generated on:
-Fri Jun  5 12:12:45 AM IST 2026
+Fri Jun  5 12:26:04 AM IST 2026
