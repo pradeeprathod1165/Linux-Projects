@@ -22,41 +22,66 @@ if [ "$choice" -eq 1 ]
 then
 	read -p "Enter username: " username
 
-	sudo useradd -m "$username"
+	if id "$username" &>/dev/null
 
-	echo "[$TIMESTAMP] USER CREATED: $username" >> "$LOGFILE"
+	then
+		echo "user already exists."
 
-	echo "User created successfully"
+		echo "[$TIMESTAMP] CREATED FAILED: $username already exists" >> "$LOGFILE"
+	else
+
+	        sudo useradd -m "$username"
+
+	        echo "[$TIMESTAMP] USER CREATED: $username" >> "$LOGFILE"
+ 
+        	echo "User created successfully"
+	fi
 
 elif [ "$choice" -eq 2 ]
 then
 	read -p "Enter username: " username
+	if id "$username" &>/dev/null
+	then
+        	sudo userdel -r "$username"
 
-	sudo userdel -r "$username"
+        	echo "[$TIMESTAMP] USER DELETED: $username" >> "$LOGFILE"
 
-	echo "[$TIMESTAMP] USER DELETED: $username" >> "$LOGFILE"
+	        echo "User deleted successfully"
+	else
+		echo "user does not exist."
 
-	echo "User deleted successfully"
+		echo "[$TIMESTAMP] DELETE FAILED: $username not found" >> "$LOGFILE"
+	fi
 
 elif [ "$choice" -eq 3 ]
 then
 	read -p "Enter username: " username
+	if id "$username" &>/dev/null
+	then
 
-	sudo usermod -L "$username"
+        	sudo usermod -L "$username"
 
-	echo "[$TIMESTAMP] USER LOCKED: $username" >> "$LOGFILE"
+        	echo "[$TIMESTAMP] USER LOCKED: $username" >> "$LOGFILE"
 
-	echo "User locked successfully"
+	        echo "User locked successfully"
+	else
+		echo "user does not exist."
+	fi
+
 
 elif [ "$choice" -eq 4 ]
 then
 	read -p "Enter username: " username
+	if id "$username" &>/dev/null
+	then
 
-	sudo usermod -U "$username"
+        	sudo usermod -U "$username"
+  
+        	echo "[$TIMESTAMP] USER UNLOCKED: $username" >> "$LOGFILE"
+ 
+        	echo "User Unlocked successfully"
+	fi
 
-	echo "[$TIMESTAMP] USER UNLOCKED: $username" >> "$LOGFILE"
-
-	echo "User Unlocked successfully"
 
 elif [ "$choice" -eq 5 ]
 then
