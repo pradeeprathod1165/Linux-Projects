@@ -1,5 +1,8 @@
 #!/bin/bash
 
+mkdir -p logs
+mkdir -p reports
+
 LOGFILE="logs/user-management.log"
 
 create_user() {
@@ -79,6 +82,33 @@ list_users() {
        awk -F: '$3 >=1000 {print $1}' /etc/passwd
 }
 
+generate_report() {
+
+    REPORT_FILE="reports/user-report.txt"
+
+    TOTAL_USERS=$(awk -F: '$3 >= 1000 {count++} END {print count}' /etc/passwd)
+
+    {
+        echo "===== USER REPORT ====="
+        echo
+        echo "Total Regular Users: $TOTAL_USERS"
+        echo
+        echo "Users:"
+        echo "----------------"
+
+        awk -F: '$3 >= 1000 {print $1}' /etc/passwd
+
+        echo
+        echo "Generated On:"
+        date
+    } > "$REPORT_FILE"
+
+    echo "Report generated successfully."
+    echo "Location: $REPORT_FILE"
+
+    echo "[$(date +"%Y-%m-%d_%H-%M-%S")] REPORT GENERATED" >> "$LOGFILE"
+}
+
 
 echo "===================="
 echo " USER MANAGEMENT TOOL"
@@ -89,7 +119,8 @@ echo "2 Delete User"
 echo "3 Lock User"
 echo "4 Unlock User"
 echo "5 List Users"
-echo "6 Exit"
+echo "6 Generate Report"
+echo "7 Exit"
 
 read -p "Enter choice: " choice
 
@@ -110,6 +141,9 @@ case $choice in
 		list_users
 		;;
 	6)
+		generate_report
+		;;
+	7)
 		echo Exiting....
 		exit 0
 		;;
