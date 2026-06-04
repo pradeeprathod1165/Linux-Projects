@@ -1,5 +1,8 @@
 #!/bin/bash
 
+LOGFILE="logs/user-management.log"
+TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
+
 echo "===================="
 echo " USER MANAGEMENT TOOL"
 echo "===================="
@@ -21,6 +24,8 @@ then
 
 	sudo useradd -m "$username"
 
+	echo "[$TIMESTAMP] USER CREATED: $username" >> "$LOGFILE"
+
 	echo "User created successfully"
 
 elif [ "$choice" -eq 2 ]
@@ -28,6 +33,8 @@ then
 	read -p "Enter username: " username
 
 	sudo userdel -r "$username"
+
+	echo "[$TIMESTAMP] USER DELETED: $username" >> "$LOGFILE"
 
 	echo "User deleted successfully"
 
@@ -37,6 +44,8 @@ then
 
 	sudo usermod -L "$username"
 
+	echo "[$TIMESTAMP] USER LOCKED: $username" >> "$LOGFILE"
+
 	echo "User locked successfully"
 
 elif [ "$choice" -eq 4 ]
@@ -44,6 +53,8 @@ then
 	read -p "Enter username: " username
 
 	sudo usermod -U "$username"
+
+	echo "[$TIMESTAMP] USER UNLOCKED: $username" >> "$LOGFILE"
 
 	echo "User Unlocked successfully"
 
