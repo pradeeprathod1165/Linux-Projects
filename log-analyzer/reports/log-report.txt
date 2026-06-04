@@ -1,9 +1,15 @@
 ==== LOG ANALYSIS REPORT ====
 
-Total Line: 5
+Total Lines: 7
 Total Warnings: 1
-Total Errors: 2
+Total Errors: 4
 Total Infos: 2
 
+
+TOP ERROR MESSAGES
+------------------
+      2  Database connection failed
+      2  Permission denied
+
 Generated on:
-Thu Jun  4 11:48:45 PM IST 2026
+Fri Jun  5 12:12:45 AM IST 2026

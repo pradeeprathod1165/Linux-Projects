@@ -29,14 +29,26 @@ display_statistics() {
         echo "Total Errors: $TOTAL_ERRORS"
         echo "Total Infos: $TOTAL_INFOS"
 }
+show_top_error() {
+	echo
+	echo "TOP ERROR MESSAGES"
+	echo "------------------"
+
+	grep "ERROR" "$LOGFILE" | cut -d ':' -f2 | sort | uniq -c
+}
+
   echo 
   display_statistics
+  echo
+  show_top_error
 
 
 {
 	echo "==== LOG ANALYSIS REPORT ===="
 	echo
         display_statistics
+	echo
+	show_top_error
 	echo
 	echo "Generated on:"
 	date
