@@ -6,7 +6,10 @@ echo "===================="
 
 echo "1. Create User"
 echo "2. Delete User"
-echo "3. Exit"
+echo "3. Lock User"
+echo "4. Unlock User"
+echo "5. Exit"
+
 
 read -p "Enter choice: " choice
 
@@ -26,6 +29,22 @@ then
 	sudo userdel -r "$username"
 
 	echo "User deleted successfully"
+
+elif [ "$choice" -eq 3 ]
+then
+	read -p "Enter username: " username
+
+	sudo usermod -L "$username"
+
+	echo "User locked successfully"
+
+elif [ "$choice" -eq 4 ]
+then
+	read -p "Enter username: " username
+
+	sudo usermod -U "$username"
+
+	echo "User Unlocked successfully"
 
 else
 	echo "EXiting......"
