@@ -8,7 +8,8 @@ echo "1. Create User"
 echo "2. Delete User"
 echo "3. Lock User"
 echo "4. Unlock User"
-echo "5. Exit"
+echo "5. List Users"
+echo "6. Exit"
 
 
 read -p "Enter choice: " choice
@@ -45,6 +46,18 @@ then
 	sudo usermod -U "$username"
 
 	echo "User Unlocked successfully"
+
+elif [ "$choice" -eq 5 ]
+then
+	echo
+
+	#echo "===== USER LIST ====="
+#list everything 
+       # cut -d: -f1 /etc/passwd
+
+       echo "===== Regular USER ====="
+
+       awk -F: '$3 >=1000 {print $1}' /etc/passwd
 
 else
 	echo "EXiting......"
