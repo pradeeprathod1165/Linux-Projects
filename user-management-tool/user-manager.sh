@@ -1,25 +1,8 @@
 #!/bin/bash
 
 LOGFILE="logs/user-management.log"
-TIMESTAMP=$(date +"%Y-%m-%d_%H-%M-%S")
 
-echo "===================="
-echo " USER MANAGEMENT TOOL"
-echo "===================="
-
-echo "1. Create User"
-echo "2. Delete User"
-echo "3. Lock User"
-echo "4. Unlock User"
-echo "5. List Users"
-echo "6. Exit"
-
-
-read -p "Enter choice: " choice
-
-
-if [ "$choice" -eq 1 ]
-then
+create_user() {
 	read -p "Enter username: " username
 
 	if id "$username" &>/dev/null
@@ -27,64 +10,64 @@ then
 	then
 		echo "user already exists."
 
-		echo "[$TIMESTAMP] CREATED FAILED: $username already exists" >> "$LOGFILE"
+		echo "[$(date +"%Y-%m-%d_%H-%M-%S")] CREATED FAILED: $username already exists" >> "$LOGFILE"
 	else
 
 	        sudo useradd -m "$username"
 
-	        echo "[$TIMESTAMP] USER CREATED: $username" >> "$LOGFILE"
+	        echo "[$(date +"%Y-%m-%d_%H-%M-%S")] USER CREATED: $username" >> "$LOGFILE"
  
         	echo "User created successfully"
 	fi
+}
 
-elif [ "$choice" -eq 2 ]
-then
+delete_user() {
 	read -p "Enter username: " username
 	if id "$username" &>/dev/null
 	then
         	sudo userdel -r "$username"
 
-        	echo "[$TIMESTAMP] USER DELETED: $username" >> "$LOGFILE"
+        	echo "[$(date +"%Y-%m-%d_%H-%M-%S")] USER DELETED: $username" >> "$LOGFILE"
 
 	        echo "User deleted successfully"
 	else
 		echo "user does not exist."
 
-		echo "[$TIMESTAMP] DELETE FAILED: $username not found" >> "$LOGFILE"
+		echo "[$(date +"%Y-%m-%d_%H-%M-%S")] DELETE FAILED: $username not found" >> "$LOGFILE"
 	fi
+}
 
-elif [ "$choice" -eq 3 ]
-then
+lock_user() {
 	read -p "Enter username: " username
 	if id "$username" &>/dev/null
 	then
 
         	sudo usermod -L "$username"
 
-        	echo "[$TIMESTAMP] USER LOCKED: $username" >> "$LOGFILE"
+        	echo "[$(date +"%Y-%m-%d_%H-%M-%S")] USER LOCKED: $username" >> "$LOGFILE"
 
 	        echo "User locked successfully"
 	else
 		echo "user does not exist."
 	fi
+}
 
-
-elif [ "$choice" -eq 4 ]
-then
+unlock_user() {
 	read -p "Enter username: " username
 	if id "$username" &>/dev/null
 	then
 
         	sudo usermod -U "$username"
   
-        	echo "[$TIMESTAMP] USER UNLOCKED: $username" >> "$LOGFILE"
+        	echo "[$(date +"%Y-%m-%d_%H-%M-%S")] USER UNLOCKED: $username" >> "$LOGFILE"
  
         	echo "User Unlocked successfully"
+	else
+		echo "user does not exist."
 	fi
+}
 
-
-elif [ "$choice" -eq 5 ]
-then
+list_users() {
 	echo
 
 	#echo "===== USER LIST ====="
@@ -94,9 +77,44 @@ then
        echo "===== Regular USER ====="
 
        awk -F: '$3 >=1000 {print $1}' /etc/passwd
+}
 
-else
-	echo "EXiting......"
-fi
 
+echo "===================="
+echo " USER MANAGEMENT TOOL"
+echo "===================="
+
+echo "1 Create User"
+echo "2 Delete User"
+echo "3 Lock User"
+echo "4 Unlock User"
+echo "5 List Users"
+echo "6 Exit"
+
+read -p "Enter choice: " choice
+
+case $choice in 
+	1)
+		create_user
+		;;
+	2)
+		delete_user
+		;;
+	3)
+		lock_user
+		;;
+	4)
+		unlock_user
+		;;
+	5)
+		list_users
+		;;
+	6)
+		echo Exiting....
+		exit 0
+		;;
+	*)
+		echo "Invalid choice"
+		;;
+esac
 
