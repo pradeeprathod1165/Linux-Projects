@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd "$(dirname "$0")" || exit 1
+
 SOURCE_DIR="test-data"
 BACKUP_DIR="backups"
 LOGFILE="logs/backup.log"
