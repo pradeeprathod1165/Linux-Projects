@@ -97,7 +97,32 @@ delete_employee() {
     echo "[$(date +"%Y-%m-%d_%H-%M-%S")] EMPLOYEE DELETED: $emp_id" >> "$LOGFILE"
 }
 
+generate_report() {
 
+    TOTAL_EMPLOYEES=$(wc -l < "$DATAFILE")
+
+    {
+        echo "===== EMPLOYEE REPORT ====="
+        echo
+
+        echo "Total Employees: $TOTAL_EMPLOYEES"
+        echo
+
+        echo "Employee List:"
+        echo "------------------------"
+
+        awk -F, '{printf "%-10s %-15s %-20s %-10s\n",$1,$2,$3,$4}' "$DATAFILE"
+
+        echo
+        echo "Generated On:"
+        date
+
+    } > "reports/employee-report.txt"
+
+    echo
+    echo "Report generated successfully."
+    echo "Location: reports/employee-report.txt"
+}
 
 echo "============================"
 echo "  EMPLOYEE MANAGEMENT SYSTEM"
