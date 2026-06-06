@@ -26,6 +26,21 @@ add_employee() {
 	echo "[$(date +"%Y-%m-%d_%H-%M-%S")]EMPLOYEE ADDED: $emp_id" >> "$LOGFILE"
 }
 
+view_employees() {
+
+    echo
+    echo "===== EMPLOYEE LIST ====="
+    echo
+
+    if [ ! -s "$DATAFILE" ]
+    then
+        echo "No employees found."
+        return
+    fi
+
+    awk -F, '{printf "%-10s %-15s %-15s %-10s\n", $1,$2,$3,$4}' "$DATAFILE"
+}
+
 
 echo "============================"
 echo "  EMPLOYEE MANAGEMENT SYSTEM"
@@ -46,7 +61,7 @@ case $choice in
 		add_employee
 		;;
 	2)
-		view_employee
+		view_employees
 		;;
 	3)
 		seach_employee
