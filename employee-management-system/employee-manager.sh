@@ -41,6 +41,26 @@ view_employees() {
     awk -F, '{printf "%-10s %-15s %-15s %-10s\n", $1,$2,$3,$4}' "$DATAFILE"
 }
 
+search_employee() {
+
+	read -p "Enter Employee ID: " emp_id
+
+	if grep -q "^$emp_id," "$DATAFILE"
+	then
+		echo
+		echo "Employee Found"
+		echo
+
+		grep "^$emp_id," "$DATAFILE" | 
+		awk -F, '{printf "%-10s %-15s %-15s %-10s\n", $1,$2,$3,$4}'
+
+	else
+		echo "Employee not found"
+	fi
+}
+
+
+
 
 echo "============================"
 echo "  EMPLOYEE MANAGEMENT SYSTEM"
@@ -64,7 +84,7 @@ case $choice in
 		view_employees
 		;;
 	3)
-		seach_employee
+		search_employee
 		;;
 	4)
 		update_employee
