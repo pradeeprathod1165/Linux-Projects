@@ -80,6 +80,23 @@ update_employee() {
     echo "[$(date +"%Y-%m-%d_%H-%M-%S")] EMPLOYEE UPDATED: $emp_id" >> "$LOGFILE"
 }
 
+delete_employee() {
+
+    read -p "Enter Employee ID to delete: " emp_id
+
+    if ! grep -q "^$emp_id," "$DATAFILE"
+    then
+        echo "Employee not found."
+        return
+    fi
+
+    sed -i "/^$emp_id,/d" "$DATAFILE"
+
+    echo "Employee deleted successfully."
+
+    echo "[$(date +"%Y-%m-%d_%H-%M-%S")] EMPLOYEE DELETED: $emp_id" >> "$LOGFILE"
+}
+
 
 
 echo "============================"
