@@ -59,6 +59,26 @@ search_employee() {
 	fi
 }
 
+update_employee() {
+
+    read -p "Enter Employee ID to update: " emp_id
+
+    if ! grep -q "^$emp_id," "$DATAFILE"
+    then
+        echo "Employee not found."
+        return
+    fi
+
+    read -p "Enter New Name: " name
+    read -p "Enter New Department: " department
+    read -p "Enter New Salary: " salary
+
+    sed -i "/^$emp_id,/c\\$emp_id,$name,$department,$salary" "$DATAFILE"
+
+    echo "Employee updated successfully."
+
+    echo "[$(date +"%Y-%m-%d_%H-%M-%S")] EMPLOYEE UPDATED: $emp_id" >> "$LOGFILE"
+}
 
 
 
